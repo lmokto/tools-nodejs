@@ -1,0 +1,19 @@
+{
+  "name": "tools-nodejs",
+  "version": "0.0.1",
+  "description": "conjunto de scripts, y modulos, usados en nodejs",
+  "main": "init.js",
+  "scripts": {
+    "test": "node init.js"
+  },
+  "keywords": [
+    "tools"
+  ],
+  "author": "lmokto",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0",
+    "twit": "^1.1.20",
+    "mongoose": "^3.8.23"
+  }
+}
