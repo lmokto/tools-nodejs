@@ -219,6 +219,23 @@ Bot.prototype.perfil = function(insert, callback){
     */
 }
 //
+
+Bot.prototype.metadatos = function(id, params, callback) {
+    var self = this;  
+    self.twit.get('statuses/show/:id', {
+        id: id, //user id o twit id
+        trim_user: true,
+        include_my_retweet: true,
+        include_entities: true
+    }, function(err, data, response) {
+        if (err) {
+            callback(err)
+        } else {
+            callback(data)
+        }
+    })
+}
+
 function randIndex(arr) {
     var index = Math.floor(arr.length * Math.random());
     return arr[index];
