@@ -236,7 +236,60 @@ Bot.prototype.metadatos = function(id, params, callback) {
     })
 }
 
+Bot.prototype.normalize = (function() {
+  
+  var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
+      to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
+      mapping = {};
+ 
+  for(var i = 0, j = from.length; i < j; i++ )
+      mapping[ from.charAt( i ) ] = to.charAt( i );
+ 
+  return function() {
+      var ret = [];
+      for( var i = 0, j = this.length; i < j; i++ ) {
+          var c = this.charAt( i );
+          if( mapping.hasOwnProperty( this.charAt( i ) ) )
+              ret.push( mapping[ c ] );
+          else
+              ret.push( c );
+      }
+      //return ret.join( '' ).replace( /[^-A-Za-z0-9]+/g, '-' ).toLowerCase();
+      return ret.join( '' );
+  }
+ 
+})();
+
+Bot.prototype.parser = function(tw){
+    var info = {"hashtag": [],"user": [],"url": [],"email": [],"img": []}
+    var result = tw.split(/\s+/);
+    for (var i = 0; i < result.length; i++) {
+        if (regexp.hashtag.test(result[i])){
+            info.hashtag.push(result[i]);
+        } else if (regexp.user.test(result[i])){ 
+            info.user.push(result[i]);
+        } else if (regexp.url.test(result[i])){
+            info.url.push(result[i]);
+        } else if (regexp.email.test(result[i])){
+            info.email.push(result[i]);
+        } else if (regexp.imageRegexp.test(result[i])){
+            info.img.push(result[i]);
+        }
+    }
+}
+
 function randIndex(arr) {
     var index = Math.floor(arr.length * Math.random());
     return arr[index];
+};
+
+var resolveTwitter = function(twitter, callback){
+    if ( typeof twitter == "string" ) {
+        var resultText = twitter.split(/\s+/);
+        for (var i = 0; i < resultText.length; i++) {
+            callback(resultText[i])
+        };
+    } else {
+        console.log("no es un string : " + typeof twitter)
+    }
 };
